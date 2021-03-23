@@ -9,7 +9,7 @@ const leftHeaderTag = document.getElementById('left-image-h2');
 const centerHeaderTag = document.getElementById('center-image-h2');
 const rightHeaderTag = document.getElementById('right-image-h2');
 
-const maxClicks = 25;
+const maxClicks = 2;
 let totalClicks = 0;
 let totalView = 0;
 
@@ -110,6 +110,7 @@ const handleClickOnImage = function (event) {
 
   }
 
+  makeImageChart();
 
 };
 
@@ -140,10 +141,10 @@ https://medium.com/@nitinpatel_20236/how-to-shuffle-correctly-shuffle-an-array-i
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * i)
-    const temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
+    const j = Math.floor(Math.random() * i);
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
   }
 }
 
@@ -173,3 +174,61 @@ new Image('Water-can', './img/water-can.jpg');
 new Image('Wine-glass', './img/wine-glass.jpg');
 
 pickNewImage();
+
+// create Bar chart
+
+function makeImageChart() {
+
+  const imageNamesArray = [];
+  const imageLikesArray = [];
+
+
+  // refactoring opportunity?
+  // for (let i = 0; i < Goat.all.length; i++) {
+  //   const singleGoatName = Goat.all[i].name;
+  //   goatNamesArray.push(singleGoatName);
+
+  // }
+
+  // for (let i = 0; i < Goat.all.length; i++) {
+  //   const currentGoat = Goat.all[i];
+  //   const singleGoatLikes = currentGoat.clicks;
+  //   goatLikesArray.push(singleGoatLikes);
+  // }
+
+  /* alternate way to build local arrays
+     Notice the "of" */
+
+  for (let image of Image.all) {
+    imageNamesArray.push(image.title);
+    imageLikesArray.push(image.clicks);
+  }
+
+  const ctx = document.getElementById('imageChart').getContext('2d');
+  const imageChart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'bar',
+
+    // The data for our dataset
+    data: {
+      labels: imageNamesArray,
+      datasets: [{
+        label: 'Image Likes',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: imageLikesArray
+      }]
+    },
+
+    // Configuration options go here
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}

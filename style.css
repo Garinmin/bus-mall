@@ -56,12 +56,12 @@ h2#choose {
 }
 
   #all-images {
-    width: 80%;
+    width: 70%;
     float: left;
   }
   
   figure {
-    width: 33%;
+    width: 50%;
     height: 400px;
     float: left;
     padding: 20px;
@@ -70,28 +70,31 @@ h2#choose {
   
   img#left-image-img, #center-image-img, #right-image-img {
     /* lots of different strategies to handle differently sized images */
-    width: 100%;
+    max-width: 100%;
     object-fit: contain;
     height: 400px;
     border: 3px solid blue;
   }
 
-  figcaption {
+  /* figcaption {
     font-size: x-large;
     margin-top: 20px;
-  }
+  } */
 
-  p {
+  /* canvas {
+    z-index: -1;
+  } */
+
+  /* p {
     position: relative;
     top:120px;
     font-size: x-large;
     margin-top: 50px;
-    z-index: -1;
-  }
+  } */
   
   footer {
     position: relative;
-    top: 50px;
+    top: 250px;
     width: 70%;
     text-align: center;
   }

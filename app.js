@@ -9,7 +9,7 @@ const leftHeaderTag = document.getElementById('left-image-h2');
 const centerHeaderTag = document.getElementById('center-image-h2');
 const rightHeaderTag = document.getElementById('right-image-h2');
 
-const maxClicks = 2;
+const maxClicks = 25;
 let totalClicks = 0;
 let totalView = 0;
 

@@ -32,16 +32,35 @@ const Image = function (title, imageSrc) {
 // initialize Constructor property
 Image.all = [];
 
-/* function getRandomImg() {
-    return Math.floor(Math.random() * Image.all.length);
-  } */
-
-
 function pickNewImage() {
+
+  const previousLeft = leftImageOnThePage;
+  const previousCenter = centerImageOnThePage;
+  const previousRight = rightImageOnThePage;
+
   shuffle(Image.all);
-  leftImageOnThePage = Image.all[0];
-  centerImageOnThePage = Image.all[1];
-  rightImageOnThePage = Image.all[2];
+
+  for (let image of Image.all) {
+    if (image !== previousLeft && image !== previousCenter && image !== previousRight) {
+      leftImageOnThePage = image;
+      break;
+    }
+  }
+
+  for (let image of Image.all) {
+    if (image !== previousLeft && image !== previousCenter && image !== previousRight && image !== leftImageOnThePage) {
+      centerImageOnThePage = image;
+      break;
+    }
+  }
+
+  for (let image of Image.all) {
+    if (image !== previousLeft && image !== previousCenter && image !== previousRight && image !== leftImageOnThePage && image !== centerImageOnThePage) {
+      rightImageOnThePage = image;
+      break;
+    }
+  }
+
   renderNewImages();
 }
 

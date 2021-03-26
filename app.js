@@ -1,6 +1,5 @@
 'use strict';
 
-// Globals
 const imageSectionTag = document.getElementById('image-pics');
 const leftImageTag = document.getElementById('left-image-img');
 const centerImageTag = document.getElementById('center-image-img');
@@ -11,9 +10,7 @@ const rightHeaderTag = document.getElementById('right-image-h2');
 
 const maxClicks = 25;
 let totalClicks = 0;
-let totalView = 0;
 
-// Variables to store the imagess already on the page
 let leftImageOnThePage = null;
 let centerImageOnThePage = null;
 let rightImageOnThePage = null;
@@ -21,11 +18,9 @@ let rightImageOnThePage = null;
 const Image = function (title, imageSrc) {
   this.title = title;
   this.clicks = 0;
-  this.view = 0;
   this.timesShown = 0;
   this.url = imageSrc;
 
-  // the all array is a property of the Image constructor
   Image.all.push(this);
 };
 
@@ -81,13 +76,11 @@ const renderNewImages = function () {
 
 const handleClickOnImage = function (event) {
 
-  // if they can still click, do clicky things
   if (totalClicks < maxClicks) {
 
     const thingWeClickedOn = event.target;
     const id = thingWeClickedOn.id;
 
-    //track the clicks and times shown
     if (id === 'left-image-img' || id === 'center-image-img' || id === 'right-image-img') {
 
       if (id === 'left-image-img') {
@@ -106,31 +99,31 @@ const handleClickOnImage = function (event) {
       centerImageOnThePage.timesShown += 1;
       rightImageOnThePage.timesShown += 1;
 
-
-      leftImageOnThePage.view += 1;
-      centerImageOnThePage.view += 1;
-      rightImageOnThePage.view += 1;
-
       //after we update data it's safe to pick new images
       pickNewImage();
     }
   }
-  // increment amount of clicks
+
   totalClicks += 1;
 
   //when they reach total max clicks, remove the clicky function
   if (totalClicks === maxClicks) {
     imageSectionTag.removeEventListener('click', handleClickOnImage);
-    alert ('All this clicking to stop');
+    alert ('Plese click to "submit" button');
 
-    //display the clicks to the page
-    renderLikes();
-    renderShown();
-
+    setItems();
+    
   }
+  
+  const btn = document.getElementById('submit');
+  btn.addEventListener('click', getResults);
+  parent.innerHTML = '';
 
+  function getResults() {
+    renderLikes(); 
+    renderShown();
+}  
   makeImageChart();
-
 };
 
 function renderLikes() {
@@ -151,12 +144,9 @@ function renderShown() {
     const imagePicture = Image.all[i];
     const imageItemElem = document.createElement('li');
     shownListElem.appendChild(imageItemElem);
-    imageItemElem.textContent = imagePicture.title + ' : ' + imagePicture.view;
+    imageItemElem.textContent = imagePicture.title + ' : ' + imagePicture.timesShown;
   }
 }
-/* fisher yates style shuffle
-https://medium.com/@nitinpatel_20236/how-to-shuffle-correctly-shuffle-an-array-in-javascript-15ea3f84bfb
-*/
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -170,8 +160,6 @@ function shuffle(array) {
 // Add Event Listeners
 imageSectionTag.addEventListener('click', handleClickOnImage);
 
-
-// Instantiate Image objects
 new Image('Bag', './img/bag.jpg');
 new Image('Banana', './img/banana.jpg');
 new Image('Bathroom', './img/bathroom.jpg');
@@ -202,22 +190,6 @@ function makeImageChart() {
   const imageLikesArray = [];
 
 
-  // refactoring opportunity?
-  // for (let i = 0; i < Goat.all.length; i++) {
-  //   const singleGoatName = Goat.all[i].name;
-  //   goatNamesArray.push(singleGoatName);
-
-  // }
-
-  // for (let i = 0; i < Goat.all.length; i++) {
-  //   const currentGoat = Goat.all[i];
-  //   const singleGoatLikes = currentGoat.clicks;
-  //   goatLikesArray.push(singleGoatLikes);
-  // }
-
-  /* alternate way to build local arrays
-     Notice the "of" */
-
   for (let image of Image.all) {
     imageNamesArray.push(image.title);
     imageLikesArray.push(image.clicks);
@@ -225,10 +197,9 @@ function makeImageChart() {
 
   const ctx = document.getElementById('imageChart').getContext('2d');
   const imageChart = new Chart(ctx, {
-    // The type of chart we want to create
+
     type: 'bar',
 
-    // The data for our dataset
     data: {
       labels: imageNamesArray,
       datasets: [{
@@ -239,7 +210,6 @@ function makeImageChart() {
       }]
     },
 
-    // Configuration options go here
     options: {
       scales: {
         yAxes: [{
@@ -251,3 +221,30 @@ function makeImageChart() {
     }
   });
 }
+
+//create storage
+
+// Setting items
+function setItems() {
+  console.log(Image.all);
+  // stringify
+  let stringifiedImage = JSON.stringify(Image.all);
+  console.log(stringifiedImage);
+  // setItems method
+  localStorage.setItem('orders', stringifiedImage);
+}
+
+function getItems() {
+  // getItems method
+  let items = localStorage.getItem('orders');
+  // parse
+  // check if I got something back
+  if (items !== null) {
+    let parsedImage = JSON.parse(items);
+    for (let item of parsedImage) {
+      let newImage = new Image(item.title, item.url);
+        console.log(item.clicks, item.timesShown);
+    }
+  }  
+}
+getItems();

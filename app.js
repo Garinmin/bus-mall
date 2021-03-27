@@ -24,7 +24,6 @@ const Image = function (title, imageSrc) {
   Image.all.push(this);
 };
 
-// initialize Constructor property
 Image.all = [];
 
 function pickNewImage() {
@@ -99,20 +98,16 @@ const handleClickOnImage = function (event) {
       centerImageOnThePage.timesShown += 1;
       rightImageOnThePage.timesShown += 1;
 
-      //after we update data it's safe to pick new images
       pickNewImage();
     }
   }
-
   totalClicks += 1;
 
-  //when they reach total max clicks, remove the clicky function
   if (totalClicks === maxClicks) {
     imageSectionTag.removeEventListener('click', handleClickOnImage);
     alert ('Plese click to "submit" button');
 
-    setItems();
-    
+    setItems();  
   }
   
   const btn = document.getElementById('submit');
@@ -157,7 +152,6 @@ function shuffle(array) {
   }
 }
 
-// Add Event Listeners
 imageSectionTag.addEventListener('click', handleClickOnImage);
 
 new Image('Bag', './img/bag.jpg');
@@ -188,7 +182,6 @@ function makeImageChart() {
 
   const imageNamesArray = [];
   const imageLikesArray = [];
-
 
   for (let image of Image.all) {
     imageNamesArray.push(image.title);
@@ -224,7 +217,6 @@ function makeImageChart() {
 
 //create storage
 
-// Setting items
 function setItems() {
   console.log(Image.all);
   // stringify
@@ -235,15 +227,13 @@ function setItems() {
 }
 
 function getItems() {
-  // getItems method
   let items = localStorage.getItem('orders');
-  // parse
-  // check if I got something back
+  
   if (items !== null) {
     let parsedImage = JSON.parse(items);
     for (let item of parsedImage) {
       let newImage = new Image(item.title, item.url);
-        console.log(item.clicks, item.timesShown);
+        console.log(newImage.clicks, newImage.timesShown);
     }
   }  
 }
